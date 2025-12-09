@@ -1,8 +1,8 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 
-langchain==0.3.18
-langchain-community==0.3.18
+langchain==0.3.19
+langchain-community==0.3.19
 langchain-groq==0.2.2
 langchain-huggingface==0.1.2
 chromadb>=0.5.0
