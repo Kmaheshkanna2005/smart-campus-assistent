@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# Databases
+*.db
+chroma_db/
+
+# Uploads
+uploads/
+
+# Node
+node_modules/

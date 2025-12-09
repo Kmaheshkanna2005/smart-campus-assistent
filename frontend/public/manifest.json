@@ -1,0 +1,23 @@
+{
+  "short_name": "CampusAI",
+  "name": "Smart Campus Assistant",
+  "description": "AI-powered assistant for students to upload notes, ask questions, get summaries and quizzes.",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2196f3",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "lang": "en-IN"
+}
