@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 function DocumentList({ documents, onRefresh }) {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
@@ -14,7 +15,7 @@ function DocumentList({ documents, onRefresh }) {
     const { docId } = deleteConfirm;
 
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/documents/${docId}`);
+      await axios.delete(`${API_BASE_URL}/api/documents/${docId}`);
       setDeleteMessage('✓ Document deleted successfully');
       setTimeout(() => {
         setDeleteConfirm(null);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 function QuestionAnswer() {
   const [question, setQuestion] = useState('');
@@ -21,7 +22,7 @@ function QuestionAnswer() {
     setSources([]);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/query', {
+      const response = await axios.post(`${API_BASE_URL}/api/query`, {
         question: question,
         use_wikipedia: useWikipedia
       });

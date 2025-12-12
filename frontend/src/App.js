@@ -4,6 +4,7 @@ import QuestionAnswer from './components/QuestionAnswer';
 import DocumentList from './components/DocumentList';
 import Summarize from './components/Summarize';
 import Quiz from './components/Quiz';
+import API_BASE_URL from './config';
 import './App.css';
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
 
   const fetchDocuments = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/documents');
+      const response = await fetch(`${API_BASE_URL}/api/documents`);
       const data = await response.json();
       setDocuments(data.documents);
     } catch (error) {

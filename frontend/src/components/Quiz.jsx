@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 function Quiz({ documents }) {
   const [selectedDocId, setSelectedDocId] = useState('');
@@ -21,7 +22,7 @@ function Quiz({ documents }) {
     setSubmittedAnswers({});
     
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/generate-quiz', {
+      const response = await axios.post(`${API_BASE_URL}/api/generate-quiz`, {
         document_id: parseInt(selectedDocId),
         num_questions: numQuestions
       });

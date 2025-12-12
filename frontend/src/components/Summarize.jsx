@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 function Summarize({ documents }) {
   const [selectedDocId, setSelectedDocId] = useState('');
@@ -16,7 +17,7 @@ function Summarize({ documents }) {
     setSummary('');
     
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/summarize', {
+      const response = await axios.post(`${API_BASE_URL}/api/summarize`, {
         document_id: parseInt(selectedDocId)
       });
       setSummary(response.data.summary);

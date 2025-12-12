@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 function FileUpload({ onUploadSuccess }) {
   const [uploadMessage, setUploadMessage] = useState('');
@@ -15,7 +16,7 @@ function FileUpload({ onUploadSuccess }) {
     setUploadMessage('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/upload', formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setUploadMessage(`✓ File uploaded successfully! ${response.data.chunks_created} chunks created.`);
