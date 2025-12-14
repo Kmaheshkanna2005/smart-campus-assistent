@@ -86,6 +86,9 @@ Smart Campus Assistant is an AI-powered educational platform that helps students
 
 ## 📁 Project Structure
 
+## 📁 Project Structure
+
+```
 smart-campus-assistant/
 ├── backend/
 │   ├── main.py                     # FastAPI application entry point
@@ -127,7 +130,8 @@ smart-campus-assistant/
     │       └── Quiz.jsx           # Quiz generation & interaction
     ├── package.json
     └── README.md
-
+```
+```
 ---
 
 ## 🚀 Backend Setup (FastAPI)
