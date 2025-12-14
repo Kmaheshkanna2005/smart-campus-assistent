@@ -127,9 +127,6 @@ smart-campus-assistant/
 │ └── Quiz.jsx # Quiz generation & interaction
 ├── package.json
 └── README.md
-
-text
-
 ---
 
 ## 🚀 Backend Setup (FastAPI)
