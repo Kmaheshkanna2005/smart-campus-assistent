@@ -1,19 +1,58 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Login from './components/Login';
+import Register from './components/Register';
 import FileUpload from './components/FileUpload';
 import QuestionAnswer from './components/QuestionAnswer';
 import DocumentList from './components/DocumentList';
 import Summarize from './components/Summarize';
 import Quiz from './components/Quiz';
-import API_BASE_URL from './config';
 import './App.css';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const [username, setUsername] = useState('');
   const [activeTab, setActiveTab] = useState('upload');
   const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Check if user is already logged in on page load
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('session_token');
+      const savedUsername = localStorage.getItem('username');
+
+      if (token && savedUsername) {
+        try {
+          // Verify session is still valid
+          await axios.get('http://127.0.0.1:8000/api/me', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          setUsername(savedUsername);
+          setIsAuthenticated(true);
+        } catch (error) {
+          // Session expired or invalid
+          localStorage.removeItem('session_token');
+          localStorage.removeItem('username');
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
 
   const fetchDocuments = async () => {
+    const token = localStorage.getItem('session_token');
     try {
-      const response = await fetch(`${API_BASE_URL}/api/documents`);
+      const response = await fetch('http://127.0.0.1:8000/api/documents', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await response.json();
       setDocuments(data.documents);
     } catch (error) {
@@ -22,26 +61,121 @@ function App() {
   };
 
   useEffect(() => {
-    fetchDocuments();
-  }, []);
+    if (isAuthenticated) {
+      fetchDocuments();
+    }
+  }, [isAuthenticated]);
 
+  const handleLoginSuccess = (user) => {
+    setUsername(user);
+    setIsAuthenticated(true);
+  };
+
+  const handleRegisterSuccess = () => {
+    setShowRegister(false);
+    alert('Registration successful! Please login.');
+  };
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem('session_token');
+    
+    try {
+      await axios.post('http://127.0.0.1:8000/api/logout', {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+
+    localStorage.removeItem('session_token');
+    localStorage.removeItem('username');
+    setIsAuthenticated(false);
+    setUsername('');
+    setDocuments([]);
+  };
+
+  // Show loading spinner while checking auth
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ 
+            fontSize: '48px', 
+            marginBottom: '16px',
+            animation: 'spin 1s linear infinite'
+          }}>
+            🎓
+          </div>
+          <p style={{ color: '#666' }}>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login/register if not authenticated
+  if (!isAuthenticated) {
+    if (showRegister) {
+      return (
+        <Register
+          onRegisterSuccess={handleRegisterSuccess}
+          onSwitchToLogin={() => setShowRegister(false)}
+        />
+      );
+    }
+    return (
+      <Login
+        onLoginSuccess={handleLoginSuccess}
+        onSwitchToRegister={() => setShowRegister(true)}
+      />
+    );
+  }
+
+  // Show main app if authenticated
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-        {/* Header */}
+        {/* Header with Logout */}
         <div style={{
           backgroundColor: 'white',
           borderRadius: '8px',
           boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
           padding: '24px',
-          marginBottom: '24px'
+          marginBottom: '24px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
         }}>
-          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#2196f3', margin: 0 }}>
-            🎓 Smart Campus Assistant
-          </h1>
-          <p style={{ color: '#666', marginTop: '8px', margin: 0 }}>
-            Upload your course materials and get instant answers, summaries, and quizzes
-          </p>
+          <div>
+            <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#2196f3', margin: 0 }}>
+              🎓 Smart Campus Assistant
+            </h1>
+            <p style={{ color: '#666', marginTop: '8px', margin: 0 }}>
+              Welcome back, <strong>{username}</strong>! Upload your course materials and get instant answers.
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#f44336',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Logout
+          </button>
         </div>
 
         {/* Tabs */}

@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from app.api.routes import router
+from app.models.database import init_auth_db
+from app.api.auth_routes import router as auth_router
 import os
 
 # Load environment variables
@@ -17,6 +19,10 @@ app = FastAPI(
     description="AI-powered assistant for students",
     version="1.0.0"
 )
+@app.on_event("startup")
+async def startup_event():
+    init_auth_db()
+
 
 # Configure CORS
 app.add_middleware(
@@ -29,6 +35,8 @@ app.add_middleware(
 
 # Include API routes
 app.include_router(router, prefix="/api", tags=["Smart Campus Assistant"])
+app.include_router(auth_router)
+
 
 @app.get("/")
 async def root():

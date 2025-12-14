@@ -2,7 +2,9 @@ from langchain_groq import ChatGroq
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from typing import List
+import wikipedia
 from app.config import settings
+
 
 class LLMService:
     """Handle LLM operations using Groq"""
@@ -14,19 +16,18 @@ class LLMService:
             temperature=0.7
         )
     
-    def generate_answer(self, query: str, context: List[str]) -> str:
+    def generate_answer(self, query: str, context: str) -> str:
         """Generate answer based on context"""
-        context_text = "\n\n".join([doc.page_content for doc in context])
-        
-        prompt_template = """You are a helpful AI assistant for students. Use the following context to answer the question. 
-If you cannot find the answer in the context, say so clearly.
+        prompt_template = """You are a helpful AI assistant for students. Use the provided context to answer the question comprehensively.
+
+If the context contains information from multiple sources (documents and Wikipedia), combine them naturally into your answer.
 
 Context:
 {context}
 
 Question: {question}
 
-Answer:"""
+Answer (provide a comprehensive response using all available information):"""
         
         prompt = PromptTemplate(
             template=prompt_template,
@@ -34,12 +35,39 @@ Answer:"""
         )
         
         chain = LLMChain(llm=self.llm, prompt=prompt)
-        response = chain.run(context=context_text, question=query)
+        response = chain.run(context=context, question=query)
         
         return response
     
-    def summarize_document(self, text: str) -> str:
-        """Summarize document text"""
+    def get_wikipedia_answer(self, query: str) -> str:
+        """Get answer from Wikipedia"""
+        try:
+            # Search Wikipedia
+            results = wikipedia.search(query, results=1)
+            
+            if not results:
+                return "I couldn't find information about that on Wikipedia."
+            
+            # Get summary
+            summary = wikipedia.summary(results[0], sentences=3)
+            return summary
+        
+        except wikipedia.exceptions.DisambiguationError as e:
+            # If disambiguation, take the first option
+            try:
+                summary = wikipedia.summary(e.options[0], sentences=3)
+                return summary
+            except:
+                return "I found multiple topics. Please be more specific."
+        
+        except wikipedia.exceptions.PageError:
+            return "I couldn't find that page on Wikipedia."
+        
+        except Exception as e:
+            return f"Error searching Wikipedia: {str(e)}"
+    
+    def generate_summary(self, text: str) -> str:
+        """Generate summary of document text"""
         prompt_template = """Summarize the following lecture notes or document in 3-4 clear paragraphs. 
 Focus on key concepts and important information.
 
@@ -85,5 +113,6 @@ Quiz:"""
         quiz = chain.run(text=text[:3000], num_questions=num_questions)
         
         return quiz
+
 
 llm_service = LLMService()

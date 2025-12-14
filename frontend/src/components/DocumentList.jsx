@@ -13,9 +13,14 @@ function DocumentList({ documents, onRefresh }) {
 
   const confirmDelete = async () => {
     const { docId } = deleteConfirm;
+    const token = localStorage.getItem('session_token');  // GET TOKEN
 
     try {
-      await axios.delete(`${API_BASE_URL}/api/documents/${docId}`);
+      await axios.delete(`${API_BASE_URL}/api/documents/${docId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`  // ADD AUTH HEADER
+        }
+      });
       setDeleteMessage('✓ Document deleted successfully');
       setTimeout(() => {
         setDeleteConfirm(null);

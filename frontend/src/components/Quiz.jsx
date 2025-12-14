@@ -21,10 +21,16 @@ function Quiz({ documents }) {
     setSelectedAnswers({});
     setSubmittedAnswers({});
     
+    const token = localStorage.getItem('session_token');
+    
     try {
       const response = await axios.post(`${API_BASE_URL}/api/generate-quiz`, {
         document_id: parseInt(selectedDocId),
         num_questions: numQuestions
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       setQuiz(response.data.quiz);
     } catch (error) {
@@ -35,7 +41,7 @@ function Quiz({ documents }) {
   };
 
   const handleSelectAnswer = (questionIndex, option) => {
-    if (submittedAnswers[questionIndex]) return; // Already submitted
+    if (submittedAnswers[questionIndex]) return;
     
     setSelectedAnswers(prev => ({
       ...prev,
@@ -75,7 +81,6 @@ function Quiz({ documents }) {
       } else if (currentQuestion && line.match(/^[A-D]\)/)) {
         currentQuestion.options.push(line);
       } else if (currentQuestion && line.includes('Correct Answer:')) {
-        // Extract just the letter (A, B, C, or D)
         const match = line.match(/Correct Answer:\s*([A-D])/);
         currentQuestion.answer = match ? match[1] : '';
       }

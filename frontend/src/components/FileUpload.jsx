@@ -15,14 +15,19 @@ function FileUpload({ onUploadSuccess }) {
     setUploading(true);
     setUploadMessage('');
 
+    const token = localStorage.getItem('session_token');
+
     try {
       const response = await axios.post(`${API_BASE_URL}/api/upload`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
       });
-      setUploadMessage(`✓ File uploaded successfully! ${response.data.chunks_created} chunks created.`);
+      setUploadMessage(`✓ File uploaded successfully! ${response.data.chunks} chunks created.`);
       if (onUploadSuccess) onUploadSuccess();
     } catch (error) {
-      setUploadMessage(`✗ Error uploading file: ${error.message}`);
+      setUploadMessage(`✗ Error uploading file: ${error.response?.data?.detail || error.message}`);
     } finally {
       setUploading(false);
     }

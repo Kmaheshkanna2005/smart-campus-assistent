@@ -21,10 +21,16 @@ function QuestionAnswer() {
     setAnswer('');
     setSources([]);
 
+    const token = localStorage.getItem('session_token');
+
     try {
       const response = await axios.post(`${API_BASE_URL}/api/query`, {
         question: question,
         use_wikipedia: useWikipedia
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       setAnswer(response.data.answer);
       setSources(response.data.sources || []);

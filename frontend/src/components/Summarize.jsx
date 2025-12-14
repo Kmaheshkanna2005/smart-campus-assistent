@@ -16,9 +16,15 @@ function Summarize({ documents }) {
     setLoading(true);
     setSummary('');
     
+    const token = localStorage.getItem('session_token');
+    
     try {
       const response = await axios.post(`${API_BASE_URL}/api/summarize`, {
         document_id: parseInt(selectedDocId)
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       setSummary(response.data.summary);
     } catch (error) {
@@ -97,6 +103,7 @@ function Summarize({ documents }) {
           </p>
         </div>
       )}
+      
     </div>
   );
 }
