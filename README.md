@@ -88,45 +88,46 @@ Smart Campus Assistant is an AI-powered educational platform that helps students
 
 smart-campus-assistant/
 ├── backend/
-│ ├── main.py # FastAPI application entry point
-│ ├── app/
-│ │ ├── api/
-│ │ │ ├── routes.py # Main API endpoints (upload, query, etc.)
-│ │ │ └── auth_routes.py # Authentication endpoints
-│ │ ├── services/
-│ │ │ ├── document_processor.py # PDF/DOCX/PPTX parsing
-│ │ │ ├── embedding_service.py # ChromaDB & embeddings
-│ │ │ └── llm_service.py # Groq LLM calls
-│ │ ├── models/
-│ │ │ └── database.py # SQLite models & auth functions
-│ │ └── config.py # Settings & environment variables
-│ ├── uploads/ # Uploaded document storage
-│ ├── chroma_db/ # ChromaDB vector storage
-│ ├── campus_assistant.db # SQLite database
-│ ├── requirements.txt # Python dependencies
-│ └── .env # Environment variables (not in repo)
+│   ├── main.py                     # FastAPI application entry point
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── routes.py           # Main API endpoints (upload, query, etc.)
+│   │   │   └── auth_routes.py      # Authentication endpoints
+│   │   ├── services/
+│   │   │   ├── document_processor.py  # PDF/DOCX/PPTX parsing
+│   │   │   ├── embedding_service.py   # ChromaDB & embeddings
+│   │   │   └── llm_service.py         # Groq LLM calls
+│   │   ├── models/
+│   │   │   └── database.py         # SQLite models & auth functions
+│   │   └── config.py              # Settings & environment variables
+│   ├── uploads/                   # Uploaded document storage
+│   ├── chroma_db/                 # ChromaDB vector storage
+│   ├── campus_assistant.db        # SQLite database
+│   ├── requirements.txt           # Python dependencies
+│   └── .env                       # Environment variables (not in repo)
 │
 └── frontend/
-├── public/
-│ ├── index.html
-│ ├── manifest.json # PWA manifest
-│ ├── logo192.png # PWA icons
-│ └── logo512.png
-├── src/
-│ ├── App.js # Main app component with routing
-│ ├── App.css # Global styles
-│ ├── config.js # API base URL configuration
-│ ├── index.js # React entry point
-│ └── components/
-│ ├── Login.jsx # Login form
-│ ├── Register.jsx # Registration form
-│ ├── FileUpload.jsx # Document upload interface
-│ ├── DocumentList.jsx # List & manage documents
-│ ├── QuestionAnswer.jsx # Q&A interface
-│ ├── Summarize.jsx # Document summarization
-│ └── Quiz.jsx # Quiz generation & interaction
-├── package.json
-└── README.md
+    ├── public/
+    │   ├── index.html
+    │   ├── manifest.json          # PWA manifest
+    │   ├── logo192.png            # PWA icons
+    │   └── logo512.png
+    ├── src/
+    │   ├── App.js                 # Main app component with routing
+    │   ├── App.css                # Global styles
+    │   ├── config.js              # API base URL configuration
+    │   ├── index.js               # React entry point
+    │   └── components/
+    │       ├── Login.jsx          # Login form
+    │       ├── Register.jsx       # Registration form
+    │       ├── FileUpload.jsx     # Document upload interface
+    │       ├── DocumentList.jsx   # List & manage documents
+    │       ├── QuestionAnswer.jsx # Q&A interface
+    │       ├── Summarize.jsx      # Document summarization
+    │       └── Quiz.jsx           # Quiz generation & interaction
+    ├── package.json
+    └── README.md
+
 ---
 
 ## 🚀 Backend Setup (FastAPI)
